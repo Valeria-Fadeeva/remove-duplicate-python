@@ -39,7 +39,7 @@ def get_duplicate(file_list_1, file_list_2):
     list_duplicate = []
     for element in file_list_1:
         if element in file_list_2:
-            print('Finded duplicate', element)
+            print('Duplicate', element)
             list_duplicate.append(element)
 
     return list_duplicate
@@ -48,7 +48,7 @@ def get_duplicate(file_list_1, file_list_2):
 def remove_duplicate(list_duplicate, root_dir_2):
     for i in list_duplicate:
         f = os.path.join(os.path.abspath(root_dir_2), i[0].replace(os.sep, '', 1))
-        print('Remove duplicate', f)
+        print('Remove', f)
         os.remove(f)
 
 
@@ -84,8 +84,14 @@ if __name__ == "__main__":
         if not os.path.isdir(directory):
             raise ValueError("Not a directory: " + directory)
 
-    if root_dir_1 == '/' or root_dir_2 == '/':
-        raise ValueError("Root directory: " + directory)
+        if root_dir_1 == os.sep or root_dir_2 == os.sep:
+            raise ValueError("Root directory: " + directory)
+
+    if root_dir_1[-1] == os.sep:
+        root_dir_1 = root_dir_1[:-1]
+
+    if root_dir_2[-1] == os.sep:
+        root_dir_2 = root_dir_2[:-1]
 
     file_list_1 = get_file_list(root_dir_1)
     file_list_2 = get_file_list(root_dir_2)
