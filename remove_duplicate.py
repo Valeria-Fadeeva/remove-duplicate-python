@@ -29,7 +29,7 @@ def get_file_list(root_dir):
             #print(os.path.join(folder, file))
             filename = os.path.join(folder, file)
             crc = crc32(filename)
-            print(filename, crc)
+            print(crc, filename)
             file_list.append([filename.replace(root_dir, ''), crc])
 
     return file_list
@@ -45,26 +45,35 @@ def get_duplicate(file_list_1, file_list_2):
     return list_duplicate
 
 
-def remove_duplicate(list_duplicate):
+def remove_duplicate(list_duplicate, root_dir_2):
     for i in list_duplicate:
-        f = os.path.join(os.path.abspath(root_dir_2), i[0].replace(os.sep, '/', 1))
+        f = os.path.join(os.path.abspath(root_dir_2), i[0].replace(os.sep, '', 1))
         print('Remove duplicate', f)
         os.remove(f)
 
+
+#def remove_empty_folders(root_dir_2):
+    #folders = list(os.walk(root_dir_2))[1:]
+    #for folder in folders:
+        #if not folder[2]:
+            #print('Delete empty folder', folder[0])
+            #os.rmdir(folder[0])
+
+# https://stackoverflow.com/questions/22001216/scan-files-recursively-and-delete-empty-directories-in-python
 def remove_empty_folders(root_dir_2):
     index = 0
 
     for root, dirs, files in os.walk(root_dir_2):
         for dir in dirs:
-            new_dir = os.path.join(root, dir)
+            newDir = os.path.join(root, dir)
             index += 1
-            print(str(index), "--->", new_dir)
+            print(str(index), "--->", newDir)
 
             try:
-                os.removedirs(new_dir)
-                print("Delete empty folder", new_dir)
+                os.removedirs(newDir)
+                print("Delete empty folder", newDir)
             except:
-                print("Directory not empty. Skip", new_dir)
+                print("Directory not empty. Skip", newDir)
 
 
 if __name__ == "__main__":
@@ -85,7 +94,7 @@ if __name__ == "__main__":
 
     answer = input("Remove duplicate? Y/n ")
     if answer.lower() == 'y':
-        remove_duplicate(list_duplicate)
+        remove_duplicate(list_duplicate, root_dir_2)
     else:
         exit(0)
 
